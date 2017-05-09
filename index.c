@@ -5,14 +5,19 @@
   Final Project
 */
 
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
-#include <time.h>
-#include <Python.h>
+
+#define BUFFER_SIZE 255
+
+void *recognize_image(void * arg);
+void * user_interaction(void * arg);
 
 int main(){
   int status;
+  void * void_varible;
 
   pthread_t user_thread, image_recognizer;
 
@@ -25,7 +30,7 @@ int main(){
     }
   printf("Created user thread \n");
 
-  status = pthread_create(&image_recognizer, NULL, &recognize_image, &image);
+  status = pthread_create(&image_recognizer, NULL, &recognize_image, &void_varible);
   if (status)
     {
       fprintf(stderr, "ERROR: pthread_create %d\n", status);
@@ -42,7 +47,7 @@ int main(){
 }
 
 void * user_interaction(void * arg){
-  printf("Hello, welcome to iamyoueyes\n With me you will be able to recognize and know many new things\n", );
+  printf("Hello, welcome to iamyoueyes\n With me you will be able to recognize and know many new things\n");
 
 }
 
