@@ -1,5 +1,5 @@
 /*
-  Margot Duek Kalach and Jacobo Calderon Miclos
+  Margot Duek Kalach and Jacobo Calderon Miklos
   Advanced programming
   A01021226 and A01021795
   Final Project
@@ -31,7 +31,7 @@ int main(){
   void * void_varible;
 
 
-  pthread_t user_thread;
+  pthread_t user_thread; //thread variable
 
   //we start each thread checking if it was successfully created
   status = pthread_create(&user_thread, NULL, &user_interaction, &void_varible);
@@ -49,6 +49,7 @@ int main(){
   return 0;
 }
 
+//Manu for the user
 void * user_interaction(void * arg){
   int op = 0;
   int status;
@@ -59,7 +60,7 @@ void * user_interaction(void * arg){
 
   while(keep_going > 0 && keep_going < 10){
     printf("\nchoose the option you want\n 1.- Image recognition\n 2.- List images directory\n 3.- image competition\n 0.- exit/quit\n\n");
-    scanf("%d", &op);
+    scanf("%d", &op); //Waitting for the user
     if(op == 1){
       recognize_image(void_varible);
     }else if(op == 2){
@@ -74,11 +75,10 @@ void * user_interaction(void * arg){
   }
 }
 
-
-
+//Function to call the Python file
 void *recognize_image(void * arg){
 
-  char * command1 = "python classify_image.py --image_file images/";
+  char * command1 = "python classify_image.py --image_file images/"; //File name plus images directory specification.
   char command2[IMAGE];
   printf("please type the name of the image you want to analyze as it is (exaple: car.jpg)\n" );
   scanf("%s", command2);
@@ -86,7 +86,6 @@ void *recognize_image(void * arg){
   char * command = (char *) malloc(1 + strlen(command1)+ strlen(command2) );
   strcpy(command, command1);
   strcat(command, command2);
-
 
   FILE * file_ptr = NULL;
   char buffer[BUFFER_SIZE];
