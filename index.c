@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <string.h>
+#include <unistd.h>
 
 #define BUFFER_SIZE 255
 #define IMAGE 50
@@ -18,6 +19,9 @@ int keep_going = 1;
 
 void *recognize_image(void * arg);
 void * user_interaction(void * arg);
+void * competition();
+void * recognize_image_comp(void * arg);
+
 
 int main(){
   int status;
@@ -50,20 +54,13 @@ void * user_interaction(void * arg){
 
   printf("Hello, welcome to iamyoureyes\n With me you will be able to recognize and know many new things\n");
 
-  printf("choose the option you want\n 1.- Image recognition\n 2.- smt else\n 3.- smt else\n 0.- exit/quit\n\n");
-  scanf("%d", &op);
   while(keep_going > 0 && keep_going < 10){
+    printf("\nchoose the option you want\n 1.- Image recognition\n 2.- image competition\n 3.- smt else\n 0.- exit/quit\n\n");
+    scanf("%d", &op);
     if(op == 1){
-      keep_going = 11;
-      status = pthread_create(&image_recognizer, NULL, &recognize_image, &void_varible);
-      if (status)
-	{
-	  fprintf(stderr, "ERROR: pthread_create %d\n", status);
-	  exit(EXIT_FAILURE);
-	}
-      printf("Created image recognizer thread \n");
+      recognize_image(void_varible);
     }else if(op == 2){
-      keep_going = 22;
+      competition();
     }else if(op == 0){
       keep_going = 0;
     }else{
@@ -75,18 +72,18 @@ void * user_interaction(void * arg){
 
 
 void *recognize_image(void * arg){
-  FILE * file_ptr = NULL;
+
   char * command1 = "python classify_image.py --image_file images/";
   char command2[IMAGE];
   printf("please type the name of the image you want to analyze as it is (exaple: car.jpg)\n" );
   scanf("%s", command2);
-  // char * command = malloc(strlen(command1)+strlen(command2)+1);
-  //char *strcat(char *command,const char *command2);
 
   char * command = (char *) malloc(1 + strlen(command1)+ strlen(command2) );
   strcpy(command, command1);
   strcat(command, command2);
-  //printf("%s\n", command );
+
+
+  FILE * file_ptr = NULL;
   char buffer[BUFFER_SIZE];
   // Open the pipe
   file_ptr = popen(command, "r");
@@ -102,6 +99,70 @@ void *recognize_image(void * arg){
       pclose(file_ptr);
   }
 
+  keep_going = 7;
+
+}
+
+
+void * competition(){
+  int op = 0;
+  int status;
+  void * void_varible;
+  pthread_t pic_1, pic_2;
+
+  char * command1 = "python classify_image.py --image_file images/";
+  char command2[IMAGE];
+  printf("please type the name of the first image you want to analyze as it is (exaple: car.jpg)\n" );
+  scanf("%s", command2);
+  char * command = (char *) malloc(1 + strlen(command1)+ strlen(command2) );
+  strcpy(command, command1);
+  strcat(command, command2);
+
+  char * command12 = "python classify_image.py --image_file images/";
+  char command22[IMAGE];
+  printf("please type the name of the first image you want to analyze as it is (exaple: car.jpg)\n" );
+  scanf("%s", command22);
+  char * commandb = (char *) malloc(1 + strlen(command12)+ strlen(command22) );
+  strcpy(commandb, command12);
+  strcat(commandb, command22);
+
+  status = pthread_create(&pic_1, NULL, &recognize_image_comp, &commandb);
+  if (status){
+    fprintf(stderr, "ERROR: pthread_create %d\n", status);
+    exit(EXIT_FAILURE);
+  }
+  printf("Created image recognizer thread \n");
+
+  status = pthread_create(&pic_2, NULL, &recognize_image_comp, &command);
+    if (status){
+      fprintf(stderr, "ERROR: pthread_create %d\n", status);
+      exit(EXIT_FAILURE);
+    }
+    printf("Created image recognizer thread \n");
+
+
   keep_going = 1;
+
+
+}
+
+void * recognize_image_comp(void * arg){
+  char * command = ((char *)arg);
+  printf("\n %s\n", command );
+  FILE * file_ptr = NULL;
+  char buffer[BUFFER_SIZE];
+  // Open the pipe
+  file_ptr = popen(command, "r");
+  // Validate that the pipe could be opened
+  if (file_ptr != NULL)
+  {
+      while ( fgets(buffer, BUFFER_SIZE, file_ptr) )
+      {
+          printf("\t%s", buffer);
+      }
+
+      // Close the pipe
+      pclose(file_ptr);
+  }
 
 }
