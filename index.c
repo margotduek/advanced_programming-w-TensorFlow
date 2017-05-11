@@ -19,11 +19,14 @@
 #define IMAGE 50
 
 int keep_going = 1;
+char * commandb;
+char * command;
 
 void *recognize_image(void * arg);
 void * user_interaction(void * arg);
 void * competition();
 void * recognize_image_comp(void * arg);
+void * recognize_image_comp2(void * arg);
 void printDir();
 
 int main(){
@@ -119,7 +122,7 @@ void * competition(){
   char command2[IMAGE];
   printf("please type the name of the first image you want to analyze as it is (exaple: car.jpg)\n" );
   scanf("%s", command2);
-  char * command = (char *) malloc(1 + strlen(command1)+ strlen(command2) );
+  command = (char *) malloc(1 + strlen(command1)+ strlen(command2) );
   strcpy(command, command1);
   strcat(command, command2);
 
@@ -127,18 +130,18 @@ void * competition(){
   char command22[IMAGE];
   printf("please type the name of the first image you want to analyze as it is (exaple: car.jpg)\n" );
   scanf("%s", command22);
-  char * commandb = (char *) malloc(1 + strlen(command12)+ strlen(command22) );
+  commandb = (char *) malloc(1 + strlen(command12)+ strlen(command22) );
   strcpy(commandb, command12);
   strcat(commandb, command22);
 
-  status = pthread_create(&pic_1, NULL, &recognize_image_comp, &commandb);
+  status = pthread_create(&pic_1, NULL, &recognize_image_comp, &void_varible);
   if (status){
     fprintf(stderr, "ERROR: pthread_create %d\n", status);
     exit(EXIT_FAILURE);
   }
   printf("Created image recognizer thread \n");
 
-  status = pthread_create(&pic_2, NULL, &recognize_image_comp, &command);
+  status = pthread_create(&pic_2, NULL, &recognize_image_comp2, &void_varible);
     if (status){
       fprintf(stderr, "ERROR: pthread_create %d\n", status);
       exit(EXIT_FAILURE);
@@ -150,8 +153,28 @@ void * competition(){
 }
 
 void * recognize_image_comp(void * arg){
-  char * command = &(*(char *)arg);
-  printf("\n command : %s \n", command );
+  //char * commandch = ((char *)arg);
+  FILE * file_ptr = NULL;
+  char buffer[BUFFER_SIZE];
+  // Open the pipe
+  file_ptr = popen(commandb, "r");
+  // Validate that the pipe could be opened
+  if (file_ptr != NULL)
+  {
+    printf("\n First Image\n" );
+
+      while ( fgets(buffer, BUFFER_SIZE, file_ptr) )
+      {
+          printf("\t%s", buffer);
+      }
+      // Close the pipe
+      pclose(file_ptr);
+      printf("\n" );
+  }
+}
+
+void * recognize_image_comp2(void * arg){
+  //char * commandch = ((char *)arg);
   FILE * file_ptr = NULL;
   char buffer[BUFFER_SIZE];
   // Open the pipe
@@ -159,17 +182,17 @@ void * recognize_image_comp(void * arg){
   // Validate that the pipe could be opened
   if (file_ptr != NULL)
   {
+      printf("\nSecond Image\n" );
       while ( fgets(buffer, BUFFER_SIZE, file_ptr) )
       {
           printf("\t%s", buffer);
       }
-
       // Close the pipe
       pclose(file_ptr);
+      printf("\n" );
+
   }
-
 }
-
 
 void printDir()
 {
