@@ -111,18 +111,20 @@ Hello, welcome to iamyoureyes
  With me you will be able to recognize and know many new things
 choose the option you want
  1.- Image recognition
- 2.- smt else
- 3.- smt else
+ 2.- List images directory
+ 3.- Image competition
  0.- exit/quit
  ```
 
-3. We select the option 1 first. This will be the image that we will classify. This will be the output:
+#### Image Recognition
+
+1. We select the option 1 first. This will be the image that we will classify. This will be the output:
 ```bash
 Created image recognizer thread
 please type the name of the image you want to analyze as it is (exaple: car.jpg)
 ```
 
-4. We must enter the name of the image we wish to classify. Note that the name is case sensitive and it must exist on the images directory. We might get some output of TenserFlow libraries, we can ignore that. Now the output should look like this:
+2. We must enter the name of the image we wish to classify. Note that the name is case sensitive and it must exist on the images directory. We might get some output of TenserFlow libraries, we can ignore that. Now the output should look like this:
 ```bash
 rana.jpg
 tailed frog, bell toad, ribbed toad, tailed toad, Ascaphus trui (score = 0.92112)
@@ -130,6 +132,33 @@ bullfrog, Rana catesbeiana (score = 0.02468)
 tree frog, tree-frog (score = 0.01106)
 common newt, Triturus vulgaris (score = 0.00207)
 banded gecko (score = 0.00202)
+```
+
+#### List images directory
+
+1. Now we select option 2. This option will list the contents of the images directory, that way we will know which elements we can use for the recognition. We can use parallelism for this task. The output should look like this:
+```bash
+>> ..
+>> .
+>> karate.jpg
+>> frog.jpeg
+>> car.jpg
+```
+
+#### Image Competition
+
+1. Now we select option 3. This option is used to compare the recognition speed of two images. This is a measurement to identify which images are better for recognition and which need to be worked on. The output will show both results of the images, the one that is printed first is the fastest one. Should look like this:
+```bash
+ballplayer, baseball player (score = 0.38057) #Here starts the fastest image.
+tennis ball (score = 0.13414)
+lab coat, laboratory coat (score = 0.11538)
+racket, racquet (score = 0.03544)
+baseball (score = 0.02133)
+minivan (score = 0.92107)   #Here starts the slower image
+car wheel (score = 0.00974)
+beach wagon, station wagon, wagon, estate car, beach waggon, station waggon, waggon (score = 0.00794)
+grille, radiator grille (score = 0.00260)
+pickup, pickup truck (score = 0.00138)
 ```
 
 ### Get help with Python file

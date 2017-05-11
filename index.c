@@ -55,9 +55,7 @@ int main(){
 //Manu for the user
 void * user_interaction(void * arg){
   int op = 0;
-  int status;
-  void * void_varible;
-  pthread_t image_recognizer;
+  void * void_varible = NULL;
 
   printf("Hello, welcome to iamyoureyes\n With me you will be able to recognize and know many new things\n");
 
@@ -112,7 +110,6 @@ void *recognize_image(void * arg){
 
 
 void * competition(){
-  int op = 0;
   int status;
   void * void_varible;
   pthread_t pic_1, pic_2;
