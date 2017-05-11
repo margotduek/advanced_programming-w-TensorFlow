@@ -1,24 +1,39 @@
+#Margot Duek Kakach y Jacobo Calderon Miklos
+# Copyright 2015 The TensorFlow Authors. All Rights Reserved.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+# ==============================================================================
 
+#Partial imports from modules
 from __future__ import absolute_import
 from __future__ import division
 from __future__ import print_function
 
+#Needed Python modules
 import argparse
 import os.path
 import re
 import sys
 import tarfile
 
+#Needed modules for TensorFlow
 import numpy as np
 from six.moves import urllib
 import tensorflow as tf
 
 FLAGS = None
 
-# pylint: disable=line-too-long
 DATA_URL = 'http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz'
-# pylint: enable=line-too-long
-
 
 class NodeLookup(object):
   """Converts integer node ID's to human readable labels."""
@@ -155,6 +170,12 @@ def main(_):
 
 if __name__ == '__main__':
   parser = argparse.ArgumentParser()
+  # classify_image_graph_def.pb:
+  #   Binary representation of the GraphDef protocol buffer.
+  # imagenet_synset_to_human_label_map.txt:
+  #   Map from synset ID to a human readable string.
+  # imagenet_2012_challenge_label_map_proto.pbtxt:
+  #   Text representation of a protocol buffer mapping a label to synset ID.
   parser.add_argument(
       '--model_dir',
       type=str,
